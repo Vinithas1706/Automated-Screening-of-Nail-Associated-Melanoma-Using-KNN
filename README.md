@@ -1,5 +1,6 @@
 # Automated Screening of Nail-Associated Melanoma Using KNN
 
+
 Educational research prototype. **Not a medical device and not a diagnostic system.**
 Flask web app + scikit-learn KNN on hand-crafted colour, texture and shape features.
 
@@ -96,3 +97,4 @@ notebooks/experimentation.ipynb   exploratory work (stops before the test set)
 | `Missing folder: dataset\melanoma` | Create both class folders |
 | A split contains only one class | You need more images per class |
 | `ModuleNotFoundError` | Activate the venv, then `pip install -r requirements.txt` |
+
