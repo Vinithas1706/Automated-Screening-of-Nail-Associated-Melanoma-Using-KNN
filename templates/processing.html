@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block title %}Analysis{% endblock %}
+{% block content %}
+{% set im = r.images %}
+{% macro stage(title, file, note, star=false) %}
+<div class="col-6 col-md-3"><div class="stage-card {{ 'star' if star }}">
+  <img class="stage-img" src="{{ url_for('media', name=file) }}" alt="{{ title }}">
+  <div class="cap"><b>{{ title }}</b><span>{{ note }}</span></div></div></div>
+{% endmacro %}
+
+<section class="container py-3" style="max-width: 980px;">
+  <div class="page-head mb-4"><h1>Analysing your photo</h1><p>Five steps, from the dataset to the match.</p></div>
+
+  <ol class="pipeline" id="pipeline">
+
+    <!-- 1 Dataset -->
+    <li class="pstep" data-step>
+      <div class="phead"><span class="pnum">1</span><h3>Dataset</h3><span class="pstate"></span></div>
+      <div class="pbody">
+        {% if m %}
+        {% set cl = m.audit.clean_images_per_class %}
+        <div class="row g-3 text-center">
+          <div class="col-4"><div class="fact"><b>{{ cl.melanoma + cl.non_melanoma }}</b><span>images used</span></div></div>
+          <div class="col-4"><div class="fact"><b>{{ cl.melanoma }}</b><span>melanoma</span></div></div>
+          <div class="col-4"><div class="fact"><b>{{ cl.non_melanoma }}</b><span>non-melanoma</span></div></div>
+        </div>
+        <div class="small text-muted mt-3">
+          Split: train {{ m.split_counts.train.melanoma + m.split_counts.train.non_melanoma }} &middot;
+          validation {{ m.split_counts.validation.melanoma + m.split_counts.validation.non_melanoma }} &middot;
+          test {{ m.split_counts.test.melanoma + m.split_counts.test.non_melanoma }}
+          ({{ m.split_mode }}). The new photo is compared with the training images only.
+        </div>
+        {% else %}
+        <p class="mb-0 text-muted">Dataset details appear here after you train the model.</p>
+        {% endif %}
+      </div>
+    </li>
+
+    <!-- 2 Preprocessing -->
+    <li class="pstep" data-step>
+      <div class="phead"><span class="pnum">2</span><h3>Preprocessing</h3><span class="pstate"></span></div>
+      <div class="pbody"><div class="row g-3">
+        {{ stage('Original', im.original, 'As uploaded') }}
+        {{ stage('Resized', im.resized, '224 x 224 pixels') }}
+        {{ stage('Noise removed', im.denoised, 'Edge-keeping smoothing') }}
+        {{ stage('Contrast boosted', im.enhanced, 'CLAHE on lightness') }}
+      </div></div>
+    </li>
+
+    <!-- 3 Skin removal -->
+    <li class="pstep" data-step>
+      <div class="phead"><span class="pnum">3</span><h3>Skin removal</h3>
+        {% if im._refined %}<span class="chip chip-ok">Nail isolated &middot; {{ im._area_pct }}% of frame</span>
+        {% else %}<span class="chip chip-warn">Rough outline used</span>{% endif %}
+        <span class="pstate"></span></div>
+      <div class="pbody">
+        <p class="small text-muted">Drag the handle: left shows the photo with skin, right shows only the nail.</p>
+        <div class="compare" id="compare">
+          <img src="{{ url_for('media', name=im.cutout) }}" alt="Skin removed">
+          <img class="top" src="{{ url_for('media', name=im.resized) }}" alt="With skin">
+          <span class="tag l">With skin</span><span class="tag r">Nail only</span>
+          <div class="handle"></div>
+          <input type="range" min="0" max="100" value="50" aria-label="Compare with and without skin">
+        </div>
+        <div class="row g-3 mt-2">
+          {{ stage('Nail mask', im.skin_mask, 'Detected nail in colour') }}
+          {{ stage('Nail only', im.nail_only, 'Skin removed, cropped', true) }}
+          {{ stage('Nail enhanced', im.nail_enhanced, 'Sharper detail and colour') }}
+          {{ stage('Edges', im.edges, 'Outline and pigment edges') }}
+        </div>
+        {% if not r.roi_found %}<div class="chip chip-warn mt-3">Nail not found clearly; the middle of the photo was used.</div>{% endif %}
+      </div>
+    </li>
+
+    <!-- 4 Features -->
+    <li class="pstep" data-step>
+      <div class="phead"><span class="pnum">4</span><h3>Feature extraction</h3><span class="chip chip-ok">{{ r.n_features }} measurements</span><span class="pstate"></span></div>
+      <div class="pbody">
+        <div class="row g-3">
+          {% for group, feats in r.features.items() %}
+          <div class="col-md-4"><div class="panel panel-pad h-100">
+            <h6 class="text-capitalize fw-bold">{{ group }}</h6>
+            <table class="table table-sm mb-0">{% for n, v in feats.items() %}{% if loop.index <= 6 %}<tr><td class="text-secondary">{{ n }}</td><td class="text-end">{{ '%.3f'|format(v) }}</td></tr>{% endif %}{% endfor %}</table>
+          </div></div>
+          {% endfor %}
+        </div>
+      </div>
+    </li>
+
+    <!-- 5 KNN -->
+    <li class="pstep" data-step>
+      <div class="phead"><span class="pnum">5</span><h3>KNN match</h3><span class="pstate"></span></div>
+      <div class="pbody">
+        <div class="row g-3 text-center">
+          <div class="col-4"><div class="fact"><b>{{ r.k }}</b><span>neighbours (K)</span></div></div>
+          <div class="col-4"><div class="fact"><b class="text-capitalize">{{ r.metric }}</b><span>distance</span></div></div>
+          <div class="col-4"><div class="fact"><b>{{ '%.2f'|format(r.mean_neighbour_distance) }}</b><span>mean distance</span></div></div>
+        </div>
+        <p class="small text-muted mt-3 mb-0">The photo's measurements are compared with every training image. The closest ones vote.</p>
+      </div>
+    </li>
+  </ol>
+
+  <div class="text-center mt-4" id="done-row">
+    <a class="btn btn-main btn-lg" href="{{ url_for('result', uid=r.uid) }}">See result</a>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<section class="hero py-5 mt-n3">
+  <div class="container py-4">
+    <span class="badge badge-soft rounded-pill px-3 py-2 mb-3">Educational research prototype</span>
+    <h1 class="display-5">Automated Screening of Nail-Associated Melanoma<br>Using the K-Nearest Neighbors Algorithm</h1>
+    <p class="lead text-secondary col-lg-8 mt-3">
+      Upload a photograph of a nail. The system pre-processes the image, extracts colour, texture and shape features,
+      and a KNN classifier trained on a labelled dataset assigns it to the <em>melanoma</em> or <em>non-melanoma</em> class.
+    </p>
+    <a href="{{ url_for('upload') }}" class="btn btn-teal btn-lg mt-2">Start Screening</a>
+    <a href="{{ url_for('performance') }}" class="btn btn-outline-teal btn-lg mt-2 ms-2">View Model Performance</a>
+  </div>
+</section>
+
+<section class="container py-5">
+  <div class="row g-4">
+    <div class="col-lg-6">
+      <div class="card card-clean h-100"><div class="card-body p-4">
+        <h3 class="section-title">About nail-associated melanoma</h3>
+        <p class="section-sub">Also called subungual melanoma, it is a melanoma that arises in the nail apparatus.</p>
+        <ul class="mb-3">
+          <li>Often appears as a dark brown or black <strong>longitudinal streak</strong> in the nail.</li>
+          <li>Warning signs include a streak that widens, has irregular colour or borders, or pigment spreading onto the surrounding skin.</li>
+          <li>It can resemble a bruise, fungal infection or harmless pigmentation, so it may be noticed late.</li>
+          <li>Only a clinical examination, dermoscopy and, when needed, a biopsy can establish a diagnosis.</li>
+        </ul>
+        <p class="small text-muted mb-0">This general information does not replace professional medical advice.</p>
+      </div></div>
+    </div>
+    <div class="col-lg-6">
+      <div class="card card-clean h-100"><div class="card-body p-4">
+        <h3 class="section-title mb-3">How the system works</h3>
+        {% set steps = [
+          ('Upload', 'You upload a JPG or PNG nail photograph.'),
+          ('Pre-process', 'Resize to 224 × 224, reduce noise, enhance contrast.'),
+          ('Extract features', 'RGB statistics and histograms, GLCM texture, entropy, shape and edge descriptors.'),
+          ('Scale', 'The scaler fitted on training data standardises the features.'),
+          ('Classify', 'The trained KNN compares the image with its nearest labelled training examples.')] %}
+        {% for t, d in steps %}
+        <div class="d-flex mb-3">
+          <span class="step-num me-3 flex-shrink-0">{{ loop.index }}</span>
+          <div><strong>{{ t }}</strong><div class="text-secondary small">{{ d }}</div></div>
+        </div>
+        {% endfor %}
+      </div></div>
+    </div>
+  </div>
+  <div class="disclaimer p-3 mt-4">
+    <strong>Important:</strong> this tool is a research prototype. Its output reflects similarity to labelled examples in a
+    training dataset and is <u>not</u> a medical diagnosis.
+  </div>
+</section>
+{% endblock %}

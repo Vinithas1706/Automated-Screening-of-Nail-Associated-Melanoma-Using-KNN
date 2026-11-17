@@ -1,0 +1,23 @@
+{
+  "images_found_per_class": {
+    "non_melanoma": 3082,
+    "melanoma": 753
+  },
+  "unsupported_files_ignored": 0,
+  "corrupted_or_unreadable": 0,
+  "too_small_images": 0,
+  "unreadable_files": [],
+  "label_conflict_images_removed": 0,
+  "exact_duplicates_removed": 0,
+  "near_duplicates_removed": 0,
+  "subject_info": {
+    "subjects_file": false
+  },
+  "clean_images_per_class": {
+    "non_melanoma": 3082,
+    "melanoma": 753
+  },
+  "clean_total": 3835,
+  "class_imbalance_ratio": 4.09,
+  "note": "Near-duplicates are detected with a perceptual (difference) hash; identical hash = treated as a duplicate. Hash collisions on very similar images are possible."
+}

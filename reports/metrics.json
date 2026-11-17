@@ -1,0 +1,207 @@
+{
+  "trained_at": "2026-11-14T05:45:52",
+  "selected": {
+    "k": 1,
+    "metric": "cosine",
+    "weights": "uniform",
+    "selection_criterion": "validation balanced accuracy (ties: recall, then smaller K)"
+  },
+  "validation": {
+    "accuracy": 0.7517361111111112,
+    "balanced_accuracy": 0.6114317934211281,
+    "precision": 0.3706896551724138,
+    "recall": 0.3805309734513274,
+    "specificity": 0.8423326133909287,
+    "f1": 0.37554585152838427,
+    "confusion_matrix": [
+      [
+        390,
+        73
+      ],
+      [
+        70,
+        43
+      ]
+    ],
+    "support": {
+      "non_melanoma": 463,
+      "melanoma": 113
+    }
+  },
+  "test": {
+    "accuracy": 0.7465277777777778,
+    "balanced_accuracy": 0.6081920526003938,
+    "precision": 0.36134453781512604,
+    "recall": 0.3805309734513274,
+    "specificity": 0.8358531317494601,
+    "f1": 0.3706896551724138,
+    "confusion_matrix": [
+      [
+        387,
+        76
+      ],
+      [
+        70,
+        43
+      ]
+    ],
+    "support": {
+      "non_melanoma": 463,
+      "melanoma": 113
+    }
+  },
+  "test_majority_class_baseline_accuracy": 0.8038194444444444,
+  "split_mode": "stratified random split (no subject information available)",
+  "split_counts": {
+    "train": {
+      "non_melanoma": 2156,
+      "melanoma": 527
+    },
+    "validation": {
+      "non_melanoma": 463,
+      "melanoma": 113
+    },
+    "test": {
+      "non_melanoma": 463,
+      "melanoma": 113
+    }
+  },
+  "n_features": 47,
+  "audit": {
+    "images_found_per_class": {
+      "non_melanoma": 3082,
+      "melanoma": 753
+    },
+    "unsupported_files_ignored": 0,
+    "corrupted_or_unreadable": 0,
+    "too_small_images": 0,
+    "unreadable_files": [],
+    "label_conflict_images_removed": 0,
+    "exact_duplicates_removed": 0,
+    "near_duplicates_removed": 0,
+    "subject_info": {
+      "subjects_file": false
+    },
+    "clean_images_per_class": {
+      "non_melanoma": 3082,
+      "melanoma": 753
+    },
+    "clean_total": 3835,
+    "class_imbalance_ratio": 4.09,
+    "note": "Near-duplicates are detected with a perceptual (difference) hash; identical hash = treated as a duplicate. Hash collisions on very similar images are possible."
+  },
+  "feature_extraction_failures": 0,
+  "top_configs": [
+    {
+      "k": 1,
+      "metric": "cosine",
+      "weights": "uniform",
+      "val_accuracy": 0.7517361111111112,
+      "val_balanced_accuracy": 0.6114317934211281,
+      "val_precision": 0.3706896551724138,
+      "val_recall": 0.3805309734513274,
+      "val_specificity": 0.8423326133909287,
+      "val_f1": 0.37554585152838427
+    },
+    {
+      "k": 1,
+      "metric": "cosine",
+      "weights": "distance",
+      "val_accuracy": 0.7517361111111112,
+      "val_balanced_accuracy": 0.6114317934211281,
+      "val_precision": 0.3706896551724138,
+      "val_recall": 0.3805309734513274,
+      "val_specificity": 0.8423326133909287,
+      "val_f1": 0.37554585152838427
+    },
+    {
+      "k": 1,
+      "metric": "manhattan",
+      "weights": "uniform",
+      "val_accuracy": 0.7465277777777778,
+      "val_balanced_accuracy": 0.6081920526003938,
+      "val_precision": 0.36134453781512604,
+      "val_recall": 0.3805309734513274,
+      "val_specificity": 0.8358531317494601,
+      "val_f1": 0.3706896551724138
+    },
+    {
+      "k": 1,
+      "metric": "manhattan",
+      "weights": "distance",
+      "val_accuracy": 0.7465277777777778,
+      "val_balanced_accuracy": 0.6081920526003938,
+      "val_precision": 0.36134453781512604,
+      "val_recall": 0.3805309734513274,
+      "val_specificity": 0.8358531317494601,
+      "val_f1": 0.3706896551724138
+    },
+    {
+      "k": 1,
+      "metric": "chebyshev",
+      "weights": "uniform",
+      "val_accuracy": 0.7621527777777778,
+      "val_balanced_accuracy": 0.6045318144459948,
+      "val_precision": 0.38235294117647056,
+      "val_recall": 0.34513274336283184,
+      "val_specificity": 0.8639308855291576,
+      "val_f1": 0.3627906976744186
+    },
+    {
+      "k": 1,
+      "metric": "chebyshev",
+      "weights": "distance",
+      "val_accuracy": 0.7621527777777778,
+      "val_balanced_accuracy": 0.6045318144459948,
+      "val_precision": 0.38235294117647056,
+      "val_recall": 0.34513274336283184,
+      "val_specificity": 0.8639308855291576,
+      "val_f1": 0.3627906976744186
+    },
+    {
+      "k": 1,
+      "metric": "euclidean",
+      "weights": "uniform",
+      "val_accuracy": 0.7413194444444444,
+      "val_balanced_accuracy": 0.5982625814713585,
+      "val_precision": 0.3474576271186441,
+      "val_recall": 0.36283185840707965,
+      "val_specificity": 0.8336933045356372,
+      "val_f1": 0.354978354978355
+    },
+    {
+      "k": 1,
+      "metric": "euclidean",
+      "weights": "distance",
+      "val_accuracy": 0.7413194444444444,
+      "val_balanced_accuracy": 0.5982625814713585,
+      "val_precision": 0.3474576271186441,
+      "val_recall": 0.36283185840707965,
+      "val_specificity": 0.8336933045356372,
+      "val_f1": 0.354978354978355
+    },
+    {
+      "k": 3,
+      "metric": "cosine",
+      "weights": "distance",
+      "val_accuracy": 0.78125,
+      "val_balanced_accuracy": 0.5963416731971176,
+      "val_precision": 0.4177215189873418,
+      "val_recall": 0.2920353982300885,
+      "val_specificity": 0.9006479481641468,
+      "val_f1": 0.34375
+    },
+    {
+      "k": 3,
+      "metric": "euclidean",
+      "weights": "uniform",
+      "val_accuracy": 0.7777777777777778,
+      "val_balanced_accuracy": 0.5808023853666928,
+      "val_precision": 0.3972602739726027,
+      "val_recall": 0.25663716814159293,
+      "val_specificity": 0.9049676025917927,
+      "val_f1": 0.3118279569892473
+    }
+  ],
+  "test_evaluated_once": true
+}

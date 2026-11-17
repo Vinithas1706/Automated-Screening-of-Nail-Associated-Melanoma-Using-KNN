@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+<section class="container py-4">
+  <div class="home-hero">
+    <h1>Drop a nail photo to begin</h1>
+    <p>The photo is analysed as soon as you add it.</p>
+  </div>
+
+  {% if not model_ready %}
+  <div class="alert alert-warning">Model not trained yet. Run <code>python -m src.train_model</code> and restart the app.</div>
+  {% endif %}
+
+  <form id="upload-form" action="{{ url_for('analyze') }}" method="post" enctype="multipart/form-data" data-max-mb="{{ max_mb }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <div id="drop-zone" class="drop-zone big" role="button" tabindex="0" aria-label="Choose or drop a nail photo">
+      <div class="drop-icon">&#8679;</div>
+      <div class="fw-bold fs-4">Drag and drop your nail photo here</div>
+      <div class="text-muted mt-1">or click to browse &middot; JPG or PNG &middot; up to {{ max_mb }} MB</div>
+      <div id="uploading" class="d-none mt-3"><span class="spinner-border spinner-border-sm me-2"></span>Uploading and analysing&hellip;</div>
+    </div>
+    <input type="file" id="image" name="image" accept=".jpg,.jpeg,.png,image/jpeg,image/png" class="d-none">
+    <div id="client-error" class="alert alert-danger mt-3 d-none"></div>
+    <div class="d-none"><div id="preview-card"><img id="preview-img" alt=""><span id="file-info"></span></div></div>
+  </form>
+
+  <div class="photo-tips mt-3">
+    <span>Daylight, no flash</span><span>One nail, centred</span><span>No nail polish</span>
+  </div>
+
+  <!-- About nail melanoma -->
+  <div class="mt-5">
+    <h2 class="h3 fw-bold mb-1">About nail melanoma</h2>
+    <p class="text-muted mb-4">A rare skin cancer that grows under the nail. Spotted early, it is treatable.</p>
+    <div class="row g-4">
+      <div class="col-lg-5">
+        <div class="panel panel-pad h-100">
+          <h5 class="panel-title">What it looks like</h5>
+          <p class="mb-2">Most often a brown or black stripe running from the cuticle to the tip of one nail. The stripe may widen, darken or blur at the edges over weeks or months.</p>
+          <p class="mb-0">Some cases are pink or have no colour at all, so any nail change that does not heal deserves a check.</p>
+        </div>
+      </div>
+      <div class="col-lg-7">
+        <div class="panel panel-pad h-100">
+          <h5 class="panel-title">Warning signs (ABCDEF)</h5>
+          <div class="abcdef">
+            <div><b>A</b><span>Age: most common between 50 and 70</span></div>
+            <div><b>B</b><span>Band: brown or black, wider than 3 mm, blurry edge</span></div>
+            <div><b>C</b><span>Change: band grows or darkens</span></div>
+            <div><b>D</b><span>Digit: usually thumb, big toe or index finger</span></div>
+            <div><b>E</b><span>Extension: colour spreads onto the skin beside the nail</span></div>
+            <div><b>F</b><span>Family or personal history of melanoma</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="panel panel-pad h-100">
+          <h5 class="panel-title">Often mistaken for</h5>
+          <p class="mb-0">Bruises under the nail, fungal infection and harmless pigment bands are far more common than melanoma. A bruise grows out with the nail; melanoma does not.</p>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="panel panel-pad h-100">
+          <h5 class="panel-title">See a doctor if</h5>
+          <p class="mb-0">A dark stripe appears without an injury, keeps widening, or the skin beside the nail turns dark. Only a dermatologist can confirm it, usually with a small biopsy.</p>
+        </div>
+      </div>
+    </div>
+    <div class="disclaimer mt-4"><strong>Not a medical diagnosis.</strong> This screening tool is an educational prototype.</div>
+  </div>
+</section>
+{% endblock %}

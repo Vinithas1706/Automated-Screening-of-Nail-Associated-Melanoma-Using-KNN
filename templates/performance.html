@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Model performance{% endblock %}
+{% block content %}
+<section class="container py-3" style="max-width: 1040px;">
+  <div class="page-head mb-4"><h1>Model performance</h1><p>Measured once on images the model never saw while training.</p></div>
+
+  {% if not m %}
+  <div class="alert alert-warning">No results yet. Run <code>python -m src.train_model</code>.</div>
+  {% else %}
+  <div class="row g-3 mb-3">
+    {% for label, key in [('Accuracy','accuracy'),('Precision','precision'),('Recall','recall'),('Specificity','specificity'),('F1-score','f1')] %}
+    <div class="col-6 col-md"><div class="panel metric-tile t{{ loop.index }}">
+      <div class="value">{{ '%.1f'|format(m.test[key] * 100) ~ '%' if m.test[key] is not none else 'n/a' }}</div>
+      <div class="label">{{ label }}</div></div></div>
+    {% endfor %}
+  </div>
+  <div class="small text-muted mb-4">
+    Test set: {{ m.test.support.melanoma + m.test.support.non_melanoma }} images &middot;
+    always guessing the bigger class would score {{ '%.1f'|format(m.test_majority_class_baseline_accuracy * 100) }}% accuracy &middot;
+    KNN with K={{ m.selected.k }}, {{ m.selected.metric }} distance
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-5"><div class="panel panel-pad"><h5 class="panel-title">Confusion matrix</h5>
+      <img class="img-fluid" src="{{ url_for('static', filename='charts/confusion_matrix.png') }}" alt="Confusion matrix"></div></div>
+    <div class="col-lg-7"><div class="panel panel-pad"><h5 class="panel-title">Validation vs test</h5>
+      <img class="img-fluid" src="{{ url_for('static', filename='charts/metrics_bar.png') }}" alt="Metrics"></div></div>
+  </div>
+
+  <div class="accordion mt-4" id="more">
+    <div class="accordion-item">
+      <h2 class="accordion-header"><button class="accordion-button collapsed" data-bs-toggle="collapse" data-bs-target="#morecharts">More charts</button></h2>
+      <div id="morecharts" class="accordion-collapse collapse" data-bs-parent="#more"><div class="accordion-body">
+        <div class="row g-3 text-center">
+          <div class="col-md-4"><img class="img-fluid" src="{{ url_for('static', filename='charts/k_curve.png') }}" alt="K curve"></div>
+          <div class="col-md-4"><img class="img-fluid" src="{{ url_for('static', filename='charts/metric_comparison.png') }}" alt="Metric comparison"></div>
+          <div class="col-md-4"><img class="img-fluid" src="{{ url_for('static', filename='charts/class_distribution.png') }}" alt="Class distribution"></div>
+        </div>
+      </div></div>
+    </div>
+  </div>
+  {% endif %}
+  <div class="mt-4"><a class="btn btn-main" href="{{ url_for('upload') }}">Scan a photo</a></div>
+</section>
+{% endblock %}

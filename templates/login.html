@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Create account' if mode == 'register' else 'Login' }}{% endblock %}
+{% block content %}
+<section class="container py-3">
+  <div class="auth-wrap">
+    <div class="auth-side">
+      <div>
+        <h2>Check a nail photo in seconds.</h2>
+        <div class="lens" aria-hidden="true"></div>
+      </div>
+      <ul>
+        <li>Skin around the nail is removed automatically</li>
+        <li>47 colour, texture and shape measurements</li>
+        <li>KNN compares it with labelled nail images</li>
+      </ul>
+    </div>
+    <div class="auth-form">
+      <h3 class="mb-1">{{ 'Create account' if mode == 'register' else 'Welcome back' }}</h3>
+      <p class="text-muted mb-4">{{ 'Choose a username and password.' if mode == 'register' else 'Login to start a scan.' }}</p>
+      <form method="post" autocomplete="on">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="mb-3">
+          <label class="form-label" for="username">Username</label>
+          <input class="form-control" id="username" name="username" required autofocus minlength="3" maxlength="30" autocomplete="username">
+        </div>
+        <div class="mb-3">
+          <label class="form-label" for="password">Password</label>
+          <input class="form-control" type="password" id="password" name="password" required minlength="6"
+                 autocomplete="{{ 'new-password' if mode == 'register' else 'current-password' }}">
+        </div>
+        {% if mode == 'register' %}
+        <div class="mb-3">
+          <label class="form-label" for="confirm">Confirm password</label>
+          <input class="form-control" type="password" id="confirm" name="confirm" required minlength="6" autocomplete="new-password">
+        </div>
+        {% endif %}
+        <button class="btn btn-main w-100" type="submit">{{ 'Create account' if mode == 'register' else 'Login' }}</button>
+      </form>
+      <div class="text-center mt-3 small">
+        {% if mode == 'register' %}Already registered? <a href="{{ url_for('login') }}">Login</a>
+        {% else %}New here? <a href="{{ url_for('register') }}">Create an account</a>{% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Result{% endblock %}
+{% block content %}
+{% set mel = r.label_id == 1 %}
+<section class="container py-3" style="max-width: 980px;">
+  <div class="page-head mb-4"><h1>Result</h1></div>
+  <div class="row g-4">
+    <div class="col-lg-6">
+      <div class="verdict {{ 'mel' if mel else 'non' }}">
+        <small>Closest match in the dataset</small>
+        <h2>{{ r.label }}</h2>
+      </div>
+      <div class="panel panel-pad mt-3">
+        <div class="d-flex align-items-center gap-4">
+          <div class="gauge" style="--p: {{ (r.prob_melanoma * 100)|round|int }}; --c: var(--rose);"><span>{{ '%.0f'|format(r.prob_melanoma * 100) }}%</span></div>
+          <div class="flex-grow-1">
+            <div class="fw-bold mb-2">Neighbour votes</div>
+            <div class="d-flex justify-content-between small"><span>Melanoma</span><span>{{ '%.0f'|format(r.prob_melanoma * 100) }}%</span></div>
+            <div class="bar mb-3"><i style="width: {{ r.prob_melanoma * 100 }}%; background: var(--rose)"></i></div>
+            <div class="d-flex justify-content-between small"><span>Non-melanoma</span><span>{{ '%.0f'|format(r.prob_non_melanoma * 100) }}%</span></div>
+            <div class="bar"><i style="width: {{ r.prob_non_melanoma * 100 }}%; background: var(--mint)"></i></div>
+          </div>
+        </div>
+        <div class="small text-muted mt-3">Share of the {{ r.k }} nearest training image{{ 's' if r.k != 1 }} in each class. It is a vote count, not a risk score.</div>
+      </div>
+      <div class="disclaimer mt-3"><strong>Not a medical diagnosis.</strong> See a doctor about any nail change that worries you.</div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="panel panel-pad">
+        <div class="row g-3">
+          <div class="col-6"><div class="stage-card"><img class="stage-img" src="{{ url_for('media', name=r.images.resized) }}" alt="Your photo"><div class="cap"><b>Your photo</b></div></div></div>
+          <div class="col-6"><div class="stage-card star"><img class="stage-img" src="{{ url_for('media', name=r.images.nail_only) }}" alt="Nail only"><div class="cap"><b>Nail only</b><span>Skin removed</span></div></div></div>
+          <div class="col-6"><div class="stage-card"><img class="stage-img" src="{{ url_for('media', name=r.images.nail_enhanced) }}" alt="Enhanced nail"><div class="cap"><b>Enhanced</b></div></div></div>
+          <div class="col-6"><div class="stage-card"><img class="stage-img" src="{{ url_for('media', name=r.images.edges) }}" alt="Edges"><div class="cap"><b>Edges</b></div></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-4 d-flex flex-wrap gap-2">
+    <a class="btn btn-main" href="{{ url_for('upload') }}">Scan another photo</a>
+    <a class="btn btn-line" href="{{ url_for('processing', uid=r.uid) }}">Back to steps</a>
+    <a class="btn btn-line" href="{{ url_for('performance') }}">Model performance</a>
+  </div>
+</section>
+{% endblock %}

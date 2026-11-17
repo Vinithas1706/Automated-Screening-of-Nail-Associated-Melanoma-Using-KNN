@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block title %}About{% endblock %}
+{% block content %}
+<section class="container py-4">
+  <h2 class="section-title">About the project</h2>
+  <p class="section-sub">Automated Screening of Nail-Associated Melanoma Using the K-Nearest Neighbors (KNN) Algorithm</p>
+
+  {% macro block(title) %}
+  <div class="card card-clean mb-3"><div class="card-header">{{ title }}</div><div class="card-body">{{ caller() }}</div></div>
+  {% endmacro %}
+
+  {% call block('Problem statement') %}
+  Melanoma that develops in the nail is easily mistaken for bruising, fungal infection or benign pigmentation, which can delay
+  evaluation. Image-based tools might one day help flag nails that deserve earlier professional attention. This project explores
+  whether a simple, interpretable machine-learning approach can separate melanoma-labelled from non-melanoma-labelled nail
+  photographs.
+  {% endcall %}
+
+  {% call block('Objectives') %}
+  <ul class="mb-0">
+    <li>Build an end-to-end pipeline: dataset audit, preprocessing, feature extraction, training, evaluation, deployment.</li>
+    <li>Classify nail images as melanoma or non-melanoma using K-Nearest Neighbors.</li>
+    <li>Evaluate honestly with accuracy, precision, recall, specificity, F1 and a confusion matrix on a held-out test set.</li>
+    <li>Provide a simple web interface for uploading an image and viewing the processing steps and prediction.</li>
+  </ul>
+  {% endcall %}
+
+  {% call block('Technologies used') %}
+  Python · Flask · scikit-learn (KNN, StandardScaler) · scikit-image (GLCM) · OpenCV · Pillow · NumPy · Pandas · Matplotlib ·
+  Seaborn · Joblib · HTML, CSS, JavaScript, Bootstrap 5.
+  {% endcall %}
+
+  {% call block('Methodology') %}
+  <ol class="mb-0">
+    <li><strong>Dataset audit:</strong> count images per class; detect unreadable files and duplicates.</li>
+    <li><strong>Preprocessing:</strong> resize to 224 × 224, bilateral noise reduction, CLAHE contrast enhancement, heuristic nail-region segmentation.</li>
+    <li><strong>Features:</strong> RGB mean/std, colour histograms, HSV saturation/value statistics; GLCM contrast, correlation, energy, homogeneity and entropy; nail area, perimeter, aspect ratio, solidity, circularity and edge descriptors.</li>
+    <li><strong>Scaling:</strong> StandardScaler fitted on the training split only.</li>
+    <li><strong>Split:</strong> 70 / 15 / 15 train / validation / test, stratified, grouped by subject when subject IDs are supplied.</li>
+    <li><strong>Model selection:</strong> K, distance metric and vote weighting chosen on the validation set.</li>
+    <li><strong>Evaluation:</strong> the selected model is evaluated once on the test set.</li>
+  </ol>
+  {% endcall %}
+
+  <div class="row g-3">
+    <div class="col-md-6">{% call block('Advantages') %}
+      <ul class="mb-0"><li>Simple and easy to explain: predictions come from similar labelled examples.</li>
+        <li>No heavy training stage; fast to experiment with.</li>
+        <li>Hand-crafted features are interpretable and run on ordinary computers.</li></ul>
+    {% endcall %}</div>
+    <div class="col-md-6">{% call block('Limitations') %}
+      <ul class="mb-0"><li>Not clinically validated; not a diagnostic tool.</li>
+        <li>Quality depends entirely on the size, balance and labelling of the training dataset.</li>
+        <li>Photos vary in lighting, skin tone, camera and background, which can mislead hand-crafted features.</li>
+        <li>Nail segmentation is a simple heuristic and can fail.</li>
+        <li>KNN probabilities are neighbour vote shares, not calibrated risks.</li>
+        <li>Pigmented nail changes need clinical examination and biopsy, which images cannot replace.</li></ul>
+    {% endcall %}</div>
+  </div>
+
+  {% call block('Future enhancements') %}
+  <ul class="mb-0"><li>Larger, multi-centre, clinically verified datasets with diverse skin tones.</li>
+    <li>Learned nail segmentation and deep-learning feature extractors compared against the KNN baseline.</li>
+    <li>Probability calibration, confidence intervals and external validation.</li>
+    <li>Dermoscopy images and patient-level metadata; clinician-in-the-loop review.</li></ul>
+  {% endcall %}
+</section>
+{% endblock %}
