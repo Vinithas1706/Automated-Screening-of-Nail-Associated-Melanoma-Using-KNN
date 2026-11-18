@@ -1,6 +1,19 @@
+# Python
 venv/
 __pycache__/
 *.pyc
+
+# Jupyter
 .ipynb_checkpoints/
+
+# Dataset
+dataset/
+
+# User uploads and local data
 uploads/
 instance/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example

@@ -98,3 +98,20 @@ notebooks/experimentation.ipynb   exploratory work (stops before the test set)
 | A split contains only one class | You need more images per class |
 | `ModuleNotFoundError` | Activate the venv, then `pip install -r requirements.txt` |
 
+## Application Screenshots
+
+### Home Page
+![Home Page](screenshots/home.png)
+
+### Analysis Process
+
+![Analysis 1](screenshots/analysing1.png)
+
+![Analysis 2](screenshots/analysing2.png)
+
+![Analysis 3](screenshots/analyse3.png)
+
+![Analysis 4](screenshots/analyse4.png)
+
+### Prediction Result
+![Prediction Result](screenshots/result.png)
